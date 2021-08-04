@@ -1,0 +1,41 @@
+<!--index.wxml-->
+<view class="container">
+
+  <camera device-position="back" flash="off" binderror="error" style="width: 100%; height: 300px;"></camera>
+<button bindtap='takeCamera'>拍照</button>
+<image src='{{avatar}}'></image>
+
+  <view wx:for="{{list}}" wx:key="item" wx:for-item="row">
+    <text>{{row.id}}</text>
+    --
+    <text>{{row.name}}</text>
+    --
+    <text>{{row.age}}</text>
+  </view>
+
+
+  <view class='count'>{{count}}</view>
+  <button data-flag='1' bindtap='changeCount'>增加</button>
+  <button data-flag='-1' bindtap='changeCount'>减少</button>
+
+  <view class="userinfo">
+    <block wx:if="{{canIUseOpenData}}">
+      <view class="userinfo-avatar" bindtap="bindViewTap">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+      <open-data type="userNickName"></open-data>
+    </block>
+    <block wx:elif="{{!hasUserInfo}}">
+      <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
+      <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+      <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+    </block>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+</view>

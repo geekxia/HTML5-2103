@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="app">
+		<input type="text" v-model.trim.lazy='username' />
+		<br>
+		<input type="number" v-model.number='age'/>
+		<br>
+		<textarea rows="8" cols="80" v-model.lazy.trim='desc'></textarea>
+		<br>
+		<button @click='submit'>提交</button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// Vue基础 = 声明式（初级工程师） + 组件化（中高级工程师）
+		// v-model 也用得很多，但是它没有简写，为什么呢？因为 v-model 已经是一种语法糖。
+		// 三个表单修饰符（支持链式调用）：
+		// .trim 自动去除首尾字符串
+		// .number 自动进行Number类型转换
+		// .lazy 是一种表单的性能优化，经常用于长文本
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				username: '',
+				age: 10,
+				desc: ''
+			},
+			methods: {
+				submit() {
+					var data = {
+						u: this.username,
+						a: this.age,
+						d: this.desc
+					}
+					console.log('登录', data)
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

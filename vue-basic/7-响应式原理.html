@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div>
+		<input id='input' type="text" />
+		<h1 id='h1'></h1>
+	</div>
+
+	<script>
+
+		// 如何更好地说清楚Vue响应式原理？
+		// 1、普通对象是无法监听对象属性的变化，所以Vue2.0使用ES5中的Object.defineProperty()对所声明式变化进行劫持。
+		// 2、在Vue响应式系统中有一个非常重要的角色Watcher，它的核心作用找到变化的声明式变化所对应的DOM节点，然后通过真实DOM操作更新视图。
+		// 3、Vue实现响应式系统核心目标，是减少没有必要的DOM操作。Vue是如何实现尽可能减少DOM操作的呢？通过一层虚拟DOM来实现的，背后有大名鼎鼎diff运算。diff(vm1,vm2)
+
+		var obj = {
+			a: 1,
+			b: 2
+		}
+		// 这种普通对象，我们无法监听它的变化
+
+		// Vue2.0  Object.defineProperty() 劫持=>Vue系统可控制变量变化
+		// Vue3.0  Proxy
+
+		var app = {}  // Vue实例
+		var name = ''
+
+		// 响应式拦截（劫持）
+		function createReactive() {
+			// 实现name变量的响应式
+			Object.defineProperty(app, 'name', {
+				// getter
+				get() {
+					return name
+				},
+				// setter
+				set(newVal) {
+					console.log('有人修改name')
+					// 当msg发生变化时，Vue会调用Watcher去更新DOM（真实的DOM操作）
+					name = newVal
+					Watcher('name')
+				}
+			})
+		}
+
+		// 观察者模式（订阅发布模式）
+		function Watcher(key) {
+			document.getElementById('input').value = app[key]
+			document.getElementById('h1').innerText = app[key]
+		}
+
+		// 组件初始化
+		function init() {
+			// 第一步生成响应式依赖
+			createReactive()  // getter、setter
+			// 初始化DOM渲染
+			Watcher('name')
+			// 表单事件绑定
+			document.getElementById('input').addEventListener('input', function(e) {
+				console.log('---input事件')
+				// 触发setter
+				app.name = e.target.value
+			})
+		}
+		init()
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+	<div id="app">
+		<qf-dialog
+			:visiable='show'
+			@close='show=!show'
+			title='危险'
+			show-footer
+			show-close
+			size='small'
+		>
+			<!-- v-slot是封装组件时，用得非常多，所以可以简写为 # -->
+			<!-- 这个 <template #body> 意思，找到组件内部中名字叫body的slot，将其替换 -->
+			<!-- 插槽的内容是父组件的，所以如果插槽内容中各种指令的值都定义在父组件中 -->
+			<template #body>
+				<span>用户名：</span>
+				<input type="text"/>
+			</template>
+			<template #footer>
+				<qf-button round @click='show=!show' type='danger'>删除</qf-button>
+				<qf-button @click='show=!show' type='cancel'>取消</qf-button>
+			</template>
+		</qf-dialog>
+		<button @click='show=!show'>打开弹框</button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		Vue.component('qf-button', {
+			template: `
+			<span
+				class='qf-button'
+				:class='c'
+				:style='{borderRadius:round?"18px":"0"}'
+				@click='$emit("click")'>
+				<slot></slot>
+			</span>
+			`,
+			props: {
+				type: { type: String, required: false, default: 'primary' },
+				round: { type: Boolean, required: false, default: false }
+			},
+			computed: {
+				c() {
+					var arr = ['primary','success','danger','cancel']
+					return arr.includes(this.type) ? this.type : 'primary'
+				}
+			}
+		})
+		// 插槽： <slot></slot> 内置组件
+		Vue.component('qf-dialog', {
+			template: `
+			<div class='qf-dialog-layer' v-if='visiable'>
+				<div class='qf-dialog' :style='{width:size=="small"?"400px":"500px"}'>
+					<div class='header'>
+						<span v-text='title'></span>
+						<span v-if='showClose' @click='$emit("close")'>X</span>
+						<span v-else></span>
+					</div>
+					<div class='body'>
+						<slot name='body'></slot>
+					</div>
+					<div class='footer' v-if='showFooter'>
+						<slot name='footer'></slot>
+					</div>
+				</div>
+			</div>
+			`,
+			props: {
+				visiable: { type: Boolean, required: false, default: false },
+				title: { type: String, required: false, default: '提示' },
+				showFooter: { type: Boolean, required: false, default: false },
+				showClose: { type: Boolean, required: false, default: false },
+				size: { type: String, required: false, default: 'default'}
+			}
+		})
+
+		// 根组件
+		var app = new Vue({
+			el: '#app',
+			data: {
+				show: false
+			}
+		})
+	</script>
+
+</body>
+</html>

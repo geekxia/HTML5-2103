@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<div id="app">
+		<h1 id='h1' ref='h1'>100</h1>
+		<button id='btn' ref='btn'>点击</button>
+		<hr>
+
+		<input type="text" ref='ipt' />
+		<button @click='login'>登录</button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// ref
+		// 本质上是Vue开放出来的一种快捷的DOM访问接口。
+		// 原则：虽然ref可以直接访问并操作DOM，但是不要过滤使用。
+
+		var app = new Vue({
+			el: '#app',
+			mounted() {
+				// document.getElementById('btn').addEventListener('click', function(){
+				// 	var hDom = document.getElementById('h1')
+				// 	hDom.innerText = parseInt(hDom.innerText)+1
+				// })
+				console.log('refs', this.$refs)
+
+				this.$refs.btn.addEventListener('click', ()=>{
+					// 注意this指向问题
+					var hRef = this.$refs.h1
+					hRef.innerText = parseInt(hRef.innerText)+1
+				})
+			},
+			methods: {
+				login() {
+					console.log('登录', this.$refs.ipt.value)
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

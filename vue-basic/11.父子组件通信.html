@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="app">
+
+		<!-- 儿子 -->
+		<qf-child @chat='recieveChildMsg' :text='text'></qf-child>
+		<hr>
+
+		<div>
+			<input type="text" v-model.trim='msg' />
+			<button @click='sendMsgToChild'>回复儿子</button><br>
+			<div>
+				来自儿子的消息：<span v-html='content'></span>
+			</div>
+		</div>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+
+		// 父子组件通信：
+		// 1、父传子，使用props（自定义属性）来实现。
+		// 2、子传父，使用自定义事件来实现。
+
+		// @chat   function    向父组件发送聊天消息
+		// text    string      接收老父亲的信息
+
+		Vue.component('qf-child', {
+			template: `
+			<div class='qf-child'>
+				<input type="text" v-model.trim='msg' />
+				<button @click='sendToParent'>向父亲汇报</button><br />
+				<div>
+					来自父亲的消息：<span v-html='cache'></span>
+				</div>
+			</div>
+			`,
+			props: {
+				text: { type: String, required: false, default: '' }
+			},
+			data() {
+				return {
+					msg: '',
+					cache: ''  // 缓存父亲传来的信息
+				}
+			},
+			watch: {
+				text() {
+					this.cache += '<div>'+this.text+'</div>'
+				}
+			},
+			methods: {
+				// 向父亲发消息（通信）
+				sendToParent() {
+					if(this.msg) {
+						this.$emit('chat', this.msg)
+						this.msg = ''
+					}
+				}
+			}
+		})
+
+		// Vue根组件、根容器
+		var app = new Vue({
+			el: '#app',
+			data: {
+				text: '',   // 向子组件传递消息（实际上就是input表单的msg）
+				msg: '',    // 用于input的v-model
+				content: '' // 用于承载和显示child的消息
+			},
+			methods: {
+				// 作用：用于接收child的消息
+				recieveChildMsg(e) {
+					// console.log('来自child的消息', e)
+					this.content += `<div>${e}</div>`
+				},
+				// 作用：向子组件发送消息
+				sendMsgToChild() {
+					if(this.msg) {
+						this.text = this.msg
+						this.msg = ''
+					}
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="app">
+		<h1 v-text='temp'></h1>
+		<h1 v-cloak>{{temp | t}}</h1>
+		<h1 :title='temp | t'>测试过渡的[v-bind]语法</h1>
+		<hr>
+		<h1 v-cloak>{{no | stu}}</h1>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<!-- 引入时间处理工具 moment.js -->
+	<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+
+	<script>
+		// 过滤器，只支持 {{}} 和 v-bind，其它指令都不支持。
+		// 过滤器本质上就是一个数据处理函数，它必须返回文本类的值。
+		// 过滤器，可以链接调用 {{ data | f1 | f2 | f3 }}
+
+		// 全局过滤器，一次定义，全局可用。
+		Vue.filter('t', function(val) {
+			// do something
+			return moment(val).format('MM月DD日 HH时mm分')
+		})
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				temp: 1622769536402,
+				no: '20210908123'
+			},
+			// 局部过滤器，只能在当前组件作用域下使用。
+			filters: {
+				'stu': function(val) {
+					// do something
+					return 'SZ'+val
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

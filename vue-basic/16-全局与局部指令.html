@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id='app'>
+		<button v-myon:click='handle'>点击</button>
+		<button v-on:click='handle'>点击</button>
+		<hr>
+
+		<h1 v-color='"red"'>动态颜色</h1>
+		<h1 v-color='"#00ff00"'>动态颜色</h1>
+		<h1 v-color='"blue"'>动态颜色</h1>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 全局指令
+		// 进一步理解指令：通过某种方式（DOM操作）把Vue组件定义的数据或事件处理器，绑定到真实的DOM上。
+
+		Vue.directive('myon', function(el, binding){
+			console.log('el', el)
+			console.log('binding', binding)
+			el.addEventListener(binding.arg, binding.value)
+		})
+
+		var app = new Vue({
+			el: '#app',
+			methods: {
+				handle() {
+					console.log('clicked')
+				}
+			},
+			// 局部指令，只能在当前组件下使用
+			directives: {
+				'color': function(el,binding) {
+					el.style.color = binding.value
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		.qf-button {
+			width: 150px;
+			border: 1px solid #aaa;
+			padding: 20px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="app">
+		<!-- @handle，自定义事件 -->
+		<!-- :text，自定义属性 -->
+		<qf-button :text='"删除"' @handle='getChildMsg'></qf-button>
+		<qf-button text='确定' @handle='getChildMsg'></qf-button>
+		<qf-button text='提交' @handle='getChildMsg'></qf-button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 怎么理解组件化？本质上就是HTML的扩展。
+		// 为什么要组件化？复用（封装）、快速开发。
+		// Vue应用程序，就是由一个个组件组合而成（拾积木）
+		// 组件可以嵌套，被嵌套的组件称之为子组件或后代组件，反之就是父组件。
+
+		// 自定义组件的一些细节：
+		// 1、语法是 Vue.component('组件名', 选项{})
+		// 2、组件名称，必须是两个以上单词结构，用中划线连接起来。
+		// 3、定义组件时，必须得有template选项。
+		// 4、组件的视图结构，必须是单一根节点。
+		// 5、在template视图模板，你可以使用所有的指令。
+		// 6、除了el以外，其它几乎所有的Vue选项都可以使用（包括生命周期、computed、watch）。
+		// 7、除了new Vue()这个根组件以外，其它所有的自定义组件都使用工厂模式来创建data。
+		// 8、父组件向子组件通信（数据传递）：使用props选项来接收，在子组件的作用域中可以使用this来访问这个自定义属性。
+		// 9、子组件向父组件通信（数据传递）：使用自定义事件，在子组件中使用this.$emit()来触发通信。
+
+		// Vue.component('qf-child', {
+		// 	template: `
+		// 	<div class='qf-child'>qf-child</div>
+		// 	`
+		// })
+		Vue.component('qf-button', {
+			template: `
+			<div class='qf-button'>
+				<h3 v-text='count'></h3>
+				<button @click='clickHandle' v-text='text'></button>
+			</div>
+			`,
+			// 使用props自定义属性
+			props: {
+				text: { type: String, required: false, default:'默认点击' }
+			},
+			// data必须是工厂函数，避免浅拷贝
+			data() {
+				return {
+					count: 1
+				}
+			},
+			created() {
+				console.log('qf-button created')
+			},
+			mounted() {
+				console.log('qf-button mounted')
+			},
+			destroyed() {
+				console.log('qf-button destroyed')
+			},
+			methods: {
+				clickHandle(e) {
+					// console.log('qf-button clicked')
+					this.count++
+					e['name'] = 'handle'
+					e.target.value = Math.random()
+					// 在子组件中，触发父组件传递过来的自定义事件，同时回传数据
+					this.$emit('handle', e)
+				}
+			}
+		})
+
+		// 创建Vue响应式系统，这是Vue应用程序的根组件
+		var app = new Vue({
+			el: '#app',
+			data: {
+				del: "删除"
+			},
+			created() {
+				console.log('app created')
+			},
+			mounted() {
+				console.log('app mounted')
+			},
+			destroyed() {
+				console.log('app destroyed')
+			},
+			methods: {
+				getChildMsg(e) {
+					console.log('我收到了儿子消息', e)
+				}
+			}
+		})
+
+	</script>
+
+	<script>
+		// 工厂模式
+		function factory() {
+			return {
+				a: 1,
+				b: 2
+			}
+		}
+		var o1 = factory()
+		var o2 = factory()
+
+		// var a = 1
+		// var opt = {
+		// 	a,
+		// 	b() {},
+		// 	c: []
+		// }
+
+
+	</script>
+
+</body>
+</html>

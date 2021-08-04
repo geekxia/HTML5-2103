@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="app">
+
+		<!-- 普通文本框 -->
+		<span>用户名：</span>
+		<input type="text" v-model.trim='name' /><br>
+
+		<!-- 数值表单 -->
+		<span>年龄：</span>
+		<input type="number" v-model.number='age' /><br>
+
+		<!-- 多行文本框 -->
+		<span>简介：</span>
+		<textarea cols="20" rows="3" v-model.lazy='desc'></textarea><br>
+
+		<!-- 拾色器 -->
+		<span>幸运色：</span>
+		<input type="color" v-model='lucky' /><br>
+
+		<!-- 下拉框（单选） -->
+		<span>学历：</span>
+		<select v-model='level'>
+			<option
+				v-for='op in levelArr'
+				:value='op.id'
+				v-text='op.label'
+			>
+			</option>
+		</select>
+		<br>
+
+		<!-- 下拉框（多选） -->
+		<span>爱好：</span>
+		<select multiple v-model='fav'>
+			<option
+				v-for='op in favArr'
+				:value='op.id'
+				v-text='op.label'
+			>
+			</option>
+		</select>
+		<br>
+
+		<!-- 复选框 -->
+		<span>爱好：</span>
+		<span v-for='fa in favArr'>
+			<input
+				v-model='fav2'
+				:value='fa.id'
+				type="checkbox" />
+			<span v-text='fa.label'></span>
+		</span>
+		<br>
+
+		<!-- 单选按钮组 -->
+		<span>学历：</span>
+		<span v-for='le in levelArr'>
+			<input
+				v-model='level2'
+				:value='le.id'
+				type="radio" />
+			<span v-text='le.label'></span>
+		</span>
+		<br>
+
+		<button @click='submit'>提交</button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// v-model基础使用
+		// 1、表单绑定的声明式变量的类型一定搞对
+		// 2、当表单发生交互变化时，注意检查声明式变量的数据类型是否变化
+		// 3、灵活使用三个表单修饰符
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				name: '',
+				age: 0,
+				desc: '',
+				lucky: '#000000',
+				level: 1,
+				levelArr: [
+					{ id: 1, label: '博士' },
+					{ id: 2, label: '硕士' },
+					{ id: 3, label: '本科' },
+					{ id: 4, label: '大专' }
+				],
+				favArr: [
+					{ id: 1, label: '羽毛球' },
+					{ id: 2, label: '足球' },
+					{ id: 3, label: '读书' },
+					{ id: 4, label: '游行' }
+				],
+				fav: [],
+				fav2: [],
+				level2: 1
+			},
+			methods: {
+				submit() {
+					var data = {
+						name: this.name,
+						age: this.age,
+						desc: this.desc,
+						lucky: this.lucky,
+						level: this.level,
+						fav: this.fav.join('_'),
+						fav2: this.fav2.join('-'),
+						level2: this.level2
+					}
+					console.log('提交', data)
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

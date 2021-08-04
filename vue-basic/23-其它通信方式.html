@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="app">
+		<qf-child></qf-child>
+		<qf-child></qf-child>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// provide、inject通信方式，只适用于向后代组件通信。
+		// provide选项：向后代组件提供数据
+		// inject选项：接收父级组件给我的数据。
+
+		// this.$parent 访问直接父组件实例
+		// this.$children 访问直接子组件实例
+
+		Vue.component('qf-child', {
+			template: `
+			<div>
+				<h1>qf child</h1>
+			</div>
+			`,
+			// 注入、接受父级组件提供的数据
+			inject: ['msg'],
+			mounted() {
+				console.log('from super msg：', this.msg)
+				console.log('子组件实例', this)
+			}
+		})
+
+		var app = new Vue({
+			el: '#app',
+			// 向后代组件提供数据
+			provide: {
+				msg: 'hello child'
+			},
+			mounted() {
+				console.log('根组件实例', this)
+			}
+		})
+	</script>
+
+</body>
+</html>

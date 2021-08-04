@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id='app'>
+		<input type="text" v-model='first' />
+		<input type="text" v-model='last' />
+		<br>
+		
+		<h1>全名：<span v-text='full'></span></h1>
+
+		<div>
+			全名：<input type="text" v-model='fullname' />
+		</div>
+		<hr>
+
+		<input type="text" v-model='text' />
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 计算属性（选项）computed
+		// 作用：把视图模板中复杂的表达式逻辑抽离出来，便于视图代码的维护
+		// 理解：你可以把计算属性当作一个声明式变量来使用。
+		// 理解：计算属性是依赖于Vue的响应式系统（本身就具有缓存的特点）。计算属性实际上是一个fn，只有当它关联的声明式变化发生变化时，才会重新执行。
+		// 理解：计算属性还可以绑定在v-model的表单上，但需要把计算属性拆分成get/set的写法。
+
+		// 侦听器（选项）watch
+		// 作用：用于侦听（监听）声明式变量的变化。
+		// 举例：某一个变量发生变化时，调接口。
+		// 理解：在Vue中，侦听器可以监听哪些变量的变化？
+		// 可以监听三类变量的变化：data变量、computed计算属性、路由
+
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				first: '',
+				last: '',
+				msg: '',
+				text: ''
+			},
+			computed: {
+				full() {
+					// do something
+					const f = this.first.replace(/\s/img,'')
+					const l = this.last.replace(/\s/img,'')
+					return `${f}.${l}`
+				},
+				fullname: {
+					get() {
+						console.log('有人访问fullname')
+						const f = this.first.replace(/\s/img,'')
+						const l = this.last.replace(/\s/img,'')
+						return `${f}.${l}`
+					},
+					set(newVal) {
+						console.log('有人修饰fullname')
+						const arr = newVal.split('.')
+						this.first = arr[0]
+						this.last = arr[1]
+					}
+				}
+			},
+			watch: {
+				// 监听text这个声明式变量的变化，每当text变化时，这个函数都会重新调用。
+				text() {
+					console.log(`使用最新的text=${this.text}来搜索`)
+				},
+				fullname() {
+					console.log('fullname发生了变化，我准备做点事')
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

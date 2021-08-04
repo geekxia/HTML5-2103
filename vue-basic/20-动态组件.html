@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		.tabbar {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 80px;
+			line-height: 80px;
+			text-align: center;
+			display: flex;
+		}
+		.tabbar span {
+			flex: 1;
+			border: 1px solid #ccc;
+			cursor: pointer;
+		}
+		.tabbar span.on {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="app">
+
+		<!-- <qf-home v-if='idx===1'></qf-home>
+		<qf-find v-else-if='idx===2'></qf-find>
+		<qf-user v-else></qf-user> -->
+
+		<!-- <keep-alive>
+			<qf-home v-if='idx===1'></qf-home>
+			<qf-find v-else-if='idx===2'></qf-find>
+			<qf-user v-else></qf-user>
+		</keep-alive> -->
+
+		<keep-alive>
+			<component :is='comp'></component>
+		</keep-alive>
+
+		<qf-tabbar v-model='idx'></qf-tabbar>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 封装Tabbar组件（类表单）
+		Vue.component('qf-tabbar', {
+			template: `
+			<div class="tabbar">
+				<span @click='$emit("input", 1)' :class='value===1 ? "on":""'>首页</span>
+				<span @click='$emit("input", 2)' :class='value===2 ? "on":""'>发现</span>
+				<span @click='$emit("input", 3)' :class='value===3 ? "on":""'>我的</span>
+			</div>
+			`,
+			props: {
+				value: { type: Number, required: false, default: 1 }
+			}
+		})
+
+		// 动态组件：<keep-alive></keep-alive>
+		// 这是Vue内置组件，可以直接使用，它通常和另一个内置 <component></component> 一起使用。
+		// 动态组件，对应着两个重要的生命周期：activated（当组件进入前台时）、deactivated（当组件进入后台时）。
+		// 凡是被 <keep-alive> 所包裹的Vue组件永远不会被销毁。
+		// 作用：一方面用于性能优化（避免组件频繁被销毁带来的性能损耗），另一方面提升用户体验。
+
+		Vue.component('qf-home', {
+			template:`
+			<div>
+				<h1>首页</h1>
+				<input type="text" v-model='msg' />
+			</div>
+			`,
+			data() {
+				return { msg: ' '}
+			},
+			created() {
+				console.log('qf-home created')
+			},
+			destroyed() {
+				console.log('qf-home destroyed')
+			},
+			// 进入前台
+			activated() {
+				console.log('qf-home activated')
+			},
+			// 进入后台
+			deactivated() {
+				console.log('qf-home deactivated')
+			}
+		})
+
+		Vue.component('qf-find', {
+			template:`
+			<div>
+				<h1>发现</h1>
+				<input type="text" v-model='msg' />
+			</div>
+			`,
+			data() {
+				return { msg: ' '}
+			}
+		})
+
+		Vue.component('qf-user', {
+			template:`
+			<div>
+				<h1>个人中心</h1>
+				<input type="text" v-model='msg' />
+			</div>
+			`,
+			data() {
+				return { msg: ' '}
+			}
+		})
+
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				idx: 1,
+
+			},
+			computed: {
+				comp() {
+					var res = ''
+					switch (this.idx) {
+						case 1:
+							res = 'qf-home'
+							break;
+						case 2:
+							res = 'qf-find'
+							break;
+						case 3:
+							res = 'qf-user'
+							break;
+						default:
+					}
+					return res
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

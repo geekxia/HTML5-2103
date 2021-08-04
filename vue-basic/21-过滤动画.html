@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		/* enter-active 表示显示的过程 */
+		/* leave-active 表示隐藏的过程 */
+		.xxx-enter-active {
+		  transition: all 1.5s;
+		}
+		.xxx-leave-active {
+		  transition: all 1.5s;
+		}
+
+		/* enter 表示准备进入的那一刻 */
+		/* leave-to 表示已经完全隐藏的那一刻 */
+		.xxx-enter, .xxx-leave-to {
+	  	opacity: 0;
+			color: green;
+		}
+
+		/* enter-to 表示已经显示完成的那一刻 */
+		/* leave 表示准备离开的那一刻 */
+		.xxx-enter-to, .xxx-leave {
+			color: red;
+			opacity: 1;
+		}
+		/* .box {
+			opacity: 0.5;
+			color: blue;
+		} */
+	</style>
+
+	<!-- 参考资源：https://animate.style/ -->
+	<link
+		rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+</head>
+<body>
+
+	<div id="app">
+		<transition name='xxx'>
+			<h1 class="box" v-show='bol'>我是一行文字</h1>
+		</transition>
+		<button @click='bol=!bol'>显示/隐藏</button>
+		<hr>
+
+		<!-- 配合第三方动画库animate.css一起使用 -->
+		<!-- enter-active-class，用于指定进入过程的动画效果 -->
+		<!-- leave-active-class，用于指定离开过程的动画效果 -->
+		<transition
+			enter-active-class='animate__animated animate__flash'
+			leave-active-class='animate__animated animate__wobble'
+		>
+			<h1 class="box" v-show='bol1'>我是二行文字</h1>
+		</transition>
+		<button @click='bol1=!bol1'>显示/隐藏</button>
+
+		<hr>
+
+		<!-- Vue的过滤动画作用于多个节点时，一定加key，否则动画不起作用。 -->
+		<!-- 多节点执行动画时，一定加key，告诉diff运算，最小化执行DOM操作。 -->
+		<!-- mode用于指定多节点动画的运行方式，默认是in-out（表示先进后出），out-in表示离出后进 -->
+		<transition
+			enter-active-class='animate__animated animate__flash'
+			leave-active-class='animate__animated animate__wobble'
+			mode='out-in'
+		>
+			<h1 key='1' v-if='idx===1'>第一行文字</h1>
+			<h1 key='2' v-if='idx===2'>第二行文字</h1>
+			<h1 key='3' v-if='idx===3'>第三行文字</h1>
+		</transition>
+		<button @click='idx=Math.ceil(Math.random()*3)'>随机切换</button>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 过渡动画：<transition>
+		// 用法：要给谁加动画，就用<transition>将其包裹起来，并指定动画效果即可。
+		// 动画 = 进入动画Enter + 离开动画Leave
+		// 进入动画的起来（enter）、离开动画的终点（leave-to）都是看不见的，一般不需要定义它们的样式。
+		// 进入动画的终点（enter-to）、离开动画的起点（leave）的样式是由元素的class决定，一般也不需要定义。
+		// 结论：使用Vue过滤动画，一般只用定义进入过程（enter-active）和离开过程（leave-active）
+
+		var app = new Vue({
+			el: '#app',
+			data() {
+				return {
+					bol: true,
+					bol1: true,
+					idx: 1
+				}
+			}
+		})
+	</script>
+</body>
+</html>

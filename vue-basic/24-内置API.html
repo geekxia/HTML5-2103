@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="app">
+		<div v-html='str'></div>
+		<button @click='handle'>添加内容</button>
+		<hr>
+
+		<h1 ref='con' v-text='count'></h1>
+		<button @click='add'>自增</button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// $nextTick()
+		// 如何理解tick？当Vue的声明式变量发生若干变化时，Vue会自动收集脏节点，并将其分解成一个一个的tick，异步地执行这些更新任务。
+		// 通常在什么场景下必须使用到$nextTick()？举例：比如在一个逻辑中需要同步地改变data并操作DOM时。
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				str: '',
+				count: 1
+			},
+			methods: {
+				handle() {
+					// 向视图添加HTML片段
+					this.str = '<h1 id="box">我是一行文字</h1>'
+					// 当HTML片段添加成功后，我要进行若干的DOM操作
+					this.$nextTick(()=>{
+						var oBox = document.getElementById('box')
+						console.log('---oBox', oBox)
+						oBox.style.color = 'red'
+					})
+				},
+				add() {
+					// 声明式操作
+					this.count++
+					// DOM操作一定要用nextTick()
+					this.$nextTick(()=>{
+						console.log('最新count', this.$refs.con.innerText)
+					})
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

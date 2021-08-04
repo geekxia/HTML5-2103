@@ -1,0 +1,38 @@
+<script>
+	var app1 = {
+		a: 1
+	}
+
+	// Vue2中的响应式原理
+	var app2 = {}
+	var b = 0
+	Object.defineProperty(app2, 'b', {
+		get() {
+			console.log('有人访问了我')
+			return b
+		},
+		set(newVal) {
+			console.log('有人修改了我')
+			b = newVal
+			// Watcher()
+		}
+	})
+
+	// Vue3中的响应式原理
+	var app3 = {
+		a: 1,
+		b: 2,
+		c: 3
+	}
+	var proxyApp = new Proxy(app3, {
+		get(target, key) {
+			console.log('你访问了'+key)
+			return target[key]
+		},
+		set(target, key, newVal) {
+			console.log('你修改了'+key)
+			target[key] = newVal
+			// trigger
+		}
+	})
+</script>

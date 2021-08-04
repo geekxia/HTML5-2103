@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="app">
+		<h1 v-text='msg'></h1>
+		<button @click='handle'>点击</button>
+		<h1 v-text='num'></h1>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 全局混入
+		// 本质上就是把vue组件中公共的可复用的选项抽离出来，是一种代码逻辑复用的技术。
+		// 可以混入哪些选项？除了el,template等，其它的选项基本上都可以。
+		// 混入的特点：当局部的选项和全局的选项重复时，局部的优先更高。
+
+		// 真实案例：埋点技术，就可以使用混入来实现。
+
+		Vue.mixin({
+			mounted() {
+				console.log('mounted')
+				this.init()
+			},
+			methods: {
+				// 提交埋点的接口
+				init() {
+					// 根据路由来判断当前页面是否需要埋点
+					if(true){
+						// ajax.post({})
+						console.log('发送你的爱好')
+					}
+				},
+				handle() {
+					console.log('clicked')
+				}
+			}
+		})
+
+		var mix = {
+			created() {
+				console.log('created')
+			},
+			data: function() {
+				return {
+					num: 1000
+				}
+			}
+		}
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				msg: 'Hello Mixin'
+			},
+			// 局部混入
+			mixins: [mix]
+		})
+	</script>
+
+</body>
+</html>

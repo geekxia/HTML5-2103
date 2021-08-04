@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id='app'>
+		<qf-sync-button></qf-sync-button>
+		<hr>
+		<qf-async-button></qf-async-button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 异步组件：在某种条件（路由）触发下，组件才进行实例化。反之，如果不满足条件，这个组件不会被加载。
+		// 存在的意义：是一种vue项目的性能优化方案。
+
+		Vue.component('qf-sync-button', {
+			template: `
+			<div>
+				<h1>我是同步的vue组件</h1>
+			</div>
+			`
+		})
+
+		Vue.component('qf-async-button', (resolve, reject)=> {
+			setTimeout(()=>{
+				resolve({
+					template: `
+					<div>
+						<h1>我是异步的vue组件</h1>
+					</div>
+					`
+				})
+			}, 3000)
+		})
+
+
+		var app = new Vue({
+			el: '#app'
+		})
+	</script>
+
+
+</body>
+</html>

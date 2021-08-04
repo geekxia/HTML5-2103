@@ -1,0 +1,72 @@
+.qf-dialog-layer {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 9999;
+}
+.qf-dialog {
+	margin: 0 auto;
+	margin-top: 90px;
+	width: 500px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: white;
+	padding: 0 20px;
+}
+.header {
+	height: 60px;
+	line-height: 60px;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+.header span:first-child {
+	float: left;
+}
+.header span:last-child {
+	float: right;
+	cursor: pointer;
+}
+.body {
+	padding: 25px 0;
+}
+.footer {
+	height: 80px;
+	overflow: hidden;
+}
+.footer span {
+	float: right;
+	height: 36px;
+	line-height: 36px;
+	padding: 0 25px;
+	cursor: pointer;
+	margin-left: 15px;
+	cursor: pointer;
+}
+
+/* 自定义 button */
+.qf-button {
+	border: 1px solid transprent;
+}
+.primary {
+	background-color: blue;
+	color: white;
+	border-color: blue;
+}
+.success {
+	background-color: rgba(52, 196, 71, 1);
+	border-color: rgba(52, 196, 71, 1);
+	color: white;
+}
+.danger {
+	background-color: rgba(255, 131, 131, 1);
+	border-color: rgba(255, 131, 131, 1);
+	color: white;
+}
+.cancel {
+	background-color: white;
+	border-color: #cccccc;
+	color: black;
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="app">
+
+		<qf-child-a></qf-child-a>
+		<hr>
+		<qf-child-b></qf-child-b>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 在Vue中，在不考虑组件关系的前提下，有哪些通信方式？（至少有五六种）
+		// 父子组件通信（props和自定义事件）
+		// 事件总线
+		// provide、inject
+		// $parent、$children
+		// $attrs、$listener
+		// vue路由通信（路由传参、查询字符串）
+		// vuex状态管理
+		// ...
+
+		// 如何通解“通信”？实际就是组件之间的数据交互。
+
+		// 事件总线：是Vue支持一种通信方式。
+		// 事件总线是一种设计模式————订阅发布模式。
+		// 语法基础：$on()监听  $emit()触发
+
+		var bus = new Vue()  // 事件总线
+		//
+
+		Vue.component('qf-child-a', {
+			template: `
+			<div>
+				<input type="text" v-model.trim='msg' />
+				<button @click='send'>发送</button>
+			</div>
+			`,
+			data() {
+				return {
+					msg: ''
+				}
+			},
+			methods: {
+				send() {
+					// 向一个名字叫 abc的频道上发送消息
+					bus.$emit('abc', this.msg)
+					this.msg = ''
+				}
+			}
+		})
+
+		Vue.component('qf-child-b', {
+			template: `
+			<div>
+				<h3>来自qf-child-a的消息</h3>
+				<div v-html='str'></div>
+			</div>
+			`,
+			data() {
+				return {
+					str: ''
+				}
+			},
+			mounted() {
+				var that = this
+				// 监听一个名字叫 abc的频道，当有消息来时，回调函数会执行。
+				bus.$on('abc',function(msg){
+					console.log('msg', msg)
+					that.str += `<div>${msg}</div>`
+				})
+			}
+		})
+
+		var app = new Vue({
+			el: '#app'
+		})
+	</script>
+
+</body>
+</html>

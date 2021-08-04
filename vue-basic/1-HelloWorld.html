@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		.a {
+			color: red;
+		}
+		.b {
+			color: blue;
+		}
+	</style>
+</head>
+<body>
+
+	<div class='app'>
+		<h1>{{msg}}</h1>
+		<h1 v-text='foo'></h1>
+		<hr>
+		<div v-for='item in cartList'>
+			<input type="checkbox"/>
+			<span v-text='item.name'></span>
+			<span>--</span>
+			<span v-text='item.price'></span>
+		</div>
+		<hr>
+
+		<h1 v-text='count'></h1>
+		<hr>
+		<h1 v-bind:class='color'>我是一个有颜色的文字</h1>
+		<button v-on:click='changeColor'>改变颜色</button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		console.log('Vue', Vue)
+		// 创建Vue系统（Vue响应式系统）
+		// new Vue() 需要接收一个选项【options】
+
+		// el, 表示把Vue响应式系统和DOM关联起来（挂载），或者使用 $mount()
+
+		// data, 表示Vue组件的声明式数据，当Vue实例化时，这个数据会被放在this上。
+		// 当data中变量发生变化时，DOM视图结构会自动更新（是Vue在背后自动完成的）。
+
+		// 一个非常重要的Vue开发思想：当我们想改变DOM页面时，我们的正确做法是去修改这个DOM节点所对应的data声明式变量。
+
+		// methods，用于定义所有的方法（事件处理器、自定义方法）
+		var app = new Vue({
+			// el: '.app',
+			data: {
+				msg: 'Hello World',  // 来自后端
+				foo: 'Hello 2103',
+				cartList: [
+					{ id: 1, name: '小米手机', price: 3000 },
+					{ id: 2, name: '苹果电脑', price: 15000 }
+				],
+				count: 0,
+				color: 'a'
+			},
+			methods: {
+				changeColor() {
+					console.log('改变颜色')
+					// 要想改变视图（改变颜色），根据Vue思想，只用改变这个DOM节点所对应的color
+					this.color = 'b'
+				}
+			}
+		})
+		// 使用api来挂载
+		app.$mount('.app')
+		console.log('app', app)
+
+		setInterval(()=>{
+			app.count++
+		}, 1000)
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src='./rem.js'></script>
+  <style>
+    body, html { padding: 0; margin: 0; }
+    .box { font-size: 2rem; color: red; }
+  </style>
+</head>
+<body>
+
+  <div class='box'>你好你好吗</div>
+  <script>
+    // H5技术==H5网页
+    // 也可以使用vue、react做复杂的单页面应用程序（webapp）
+
+    // 第1步：在公众号后台添加当前网页要运行在的域名下（JS安全域名）,只有上线时需要。
+    // 第2步：接入JS-SDK这个微信提供的js库（里面有一些原生功能，比如地理定位、支付等）
+    // 第3步：在入口文件使用ajax向后端发起请求，得到各种加密字符，用于wx.config()进行三方验证。
+    // 第4步：三方验证成功，触发wx.ready()，如果失败触发wx.error()。
+  </script>
+
+  <script src='http://res2.wx.qq.com/open/js/jweixin-1.6.0.js'></script>
+  <script>
+    // 入口文件
+    ajax.post({token}).then(res=>{
+      wx.config({
+        debug: true,
+        appId: '',
+        timestamp: ,
+        nonceStr: '',
+        signature: '',
+        jsApiList: [
+          'getLocation',
+          'chooseWXPay'
+        ]
+      });
+    })
+    console.log('wx', wx)
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="app">
+		<h1 v-cloak>{{msg}}</h1>
+		<h1 v-text='msg'></h1>
+		<hr>
+
+		<h1 v-text='str'></h1>
+		<h1 v-html='str'></h1>
+		<hr>
+
+		<h1 v-once>{{msg}}</h1>
+		<hr>
+
+		<div v-pre>
+			<h1>{{foo}}</h1>
+		</div>
+		<hr>
+
+		<!-- 动态属性 -->
+		<!-- <h1 v-bind:title='tt'>我一行文字</h1> -->
+		<h1 :title='tt'>我一行文字</h1>
+		<!-- 静态属性 -->
+		<h1 title='1000'>我二行文字</h1>
+		<div><a :href='href'>我是一个链接</a></div>
+		<h1 :style='{color: color}' style="color:red;font-size:30px;">我是变色龙</h1>
+		<hr>
+
+		<h1 v-show='bol'>我是一个可有可无的人-Show</h1>
+		<h1 v-if='bol'>我是一个可有可无的人-IF</h1>
+		<hr>
+
+		<h1 v-if='idx===1'>我是第一行文字</h1>
+		<h1 v-else-if='idx===2'>我是第二行文字</h1>
+		<h1 v-else-if='idx===3'>我是第三行文字</h1>
+		<h1 v-else-if='idx===4'>我是第四行文字</h1>
+		<h1 v-else>我是第五行文字</h1>
+		<hr>
+
+		<h1 v-if='idx===1'>我是第一行文字</h1>
+		<h1 v-if='idx===2'>我是第二行文字</h1>
+		<div>
+			<h1 v-if='idx===3'>我是第三行文字</h1>
+		</div>
+		<h1 v-if='idx===4'>我是第四行文字</h1>
+		<h1 v-if='idx===5'>我是第五行文字</h1>
+		<hr>
+
+		<h1 v-show='idx===1'>我是第一行文字</h1>
+		<h1 v-show='idx===2'>我是第二行文字</h1>
+		<div>
+			<h1 v-show='idx===3'>我是第三行文字</h1>
+		</div>
+		<h1 v-show='idx===4'>我是第四行文字</h1>
+		<h1 v-show='idx===5'>我是第五行文字</h1>
+		<hr>
+
+		<div class="test" v-for='(u,i) in userArr'>
+			<span v-text='i'></span>
+			--
+			<span v-text='u.id'></span>
+			--
+			<span v-text='u.name'></span>
+			--
+			<span v-text='u.age'></span>
+		</div>
+		<hr>
+
+		<div v-for='(v,k,i) in userinfo'>
+			<span v-text='i'></span>
+			--
+			<span v-text='k'></span>
+			：
+			<span v-text='v'></span>
+		</div>
+		<hr>
+
+		<div v-for='(num,i) in 10'>
+			<span v-text='i'></span>
+			--
+			<span v-text='num'></span>
+		</div>
+		<hr>
+
+		<div v-for='(c,i) in "HELLO WORLD"'>
+			<span v-text='i'></span>
+			--
+			<span v-text='c'></span>
+		</div>
+		<hr>
+
+		<div>
+			用户名: <input type="text" v-model='username' /><br>
+			密码：<input type="password" v-model='password' /><br>
+			<!-- <button v-on:click='login'>登录</button> -->
+			<button @click='login'>登录</button>
+		</div>
+		<hr>
+
+		<div>
+			<input type="text" v-model='task' @keyup.enter='addTodo'/>
+		</div>
+		<!-- 待完成的列表 -->
+		<div v-for='(t,i) in list'>
+			<input type="checkbox" @click.prevent='toDone(i)' />
+			<span v-text='t.id'></span>
+			--
+			<span v-text='t.task'></span>
+		</div>
+		<hr>
+		<!-- 已完成的列表 -->
+		<div v-for='t in doneList'>
+			<input type="checkbox" />
+			<span v-text='t.id'></span>
+			--
+			<span v-text='t.task'></span>
+		</div>
+
+		<br/><br/><br/><br/><br/><br/><br/>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 一、文本类指令：用于渲染字符串、数值
+
+		// {{}}, 文本插值，用于渲染文本类的变量，但有一个缺点（花括号一闪而过）
+		// 该怎么解决？使用v-text代替，或者使用v-clock来解决。
+
+		// v-text，用于渲染文本类的变量，但是没有办法解析html字符串
+
+		// v-html，用于渲染html字符串，默认开启了“防止了XSS攻击”功能。
+
+		// v-once，用于渲染文本类变量，它的特点是“只渲染一次”，它所对应的变量如果发生变化，DOM视图不更新。
+		// v-once的语法：要和{{}}一起使用，不能给v-once赋值。
+
+		// v-pre，用于性能优化，它所包含的节点及其子节点，将不被Vue解析。
+
+
+		// 二、动态属性
+		// v-bind，用于绑定动态属性，v-bind 可以简写成 :
+		// v-bind 可以绑定你们学过的任何一个html标签的属性
+		// v-bind，是实现动态样式的重要语法：v-bind:class 和 v-bind:style
+		// 动态属性和静态属性，可以一起使用
+
+		// 三、条件渲染
+		// v-show 用于显示与隐藏，实现的原理是使用display:none来实现的。
+
+		// v-if 用于显示与隐藏，实现的原理是DOM操作（元素节点的移除）
+		// v-else-if
+		// v-else
+
+		// v-if/else-if/else，操作是真实DOM的移除与插入，所以更耗费性能
+		// v-show只是在样式做操作，所以消耗的性能更小
+
+		// 四、列表渲染
+		// v-for 用于数组、对象、字符串、数值等的渲染，相当于是ES6中的for...of遍历
+
+		// 五、表单绑定
+		// v-model 用于表单双向绑定
+		// 怎么理解“双向绑定”，特指是表单类元素，当表单所关联的声明式变量发生变化时，表单视图自动更新；当用户操作表单时，它所关联的声明式变量同步发生更新。
+
+		// 六、事件绑定
+		// v-on 用于绑定DOM事件，因为频繁使用，所以可以简写成 @
+		// 事件修饰符、事件传参 @click.prevent='toDone(i)'
+
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				msg: 10086,
+				str: '<a href="https://baidu.com">百度</a>',
+				foo: 'Hello Pre',
+				tt: '2103',
+				href: '',
+				color: 'blue',
+				abc: 'box2',
+				bol: true,
+				idx: 1,
+				userArr: [
+					{ id: 1, name: 'lisi', age: 20 },
+					{ id: 2, name: 'zhangsan', age: 30 },
+					{ id: 3, name: 'wangwu', age: 40 },
+					{ id: 4, name: 'wanba', age: 50 }
+				],
+				userinfo: {
+					name: 'Lucy',
+					age: 30,
+					address: '广东省深圳市西部'
+				},
+				username: '',
+				password: '',
+				task: '',
+				list: [],  // 待完成的任务
+				doneList: []  // 已完成的任务
+			},
+			methods: {
+				login() {
+					var data = {
+						username: this.username,
+						password: this.password
+					}
+					console.log('提交', data)
+				},
+				addTodo() {
+					console.log('添加', this.task)
+					this.list.push({id:Date.now(),task:this.task})
+					this.task = ''
+				},
+				toDone(i) {
+					console.log('点击了列表项', i)
+					// 从list这个声明式变量中，删除掉第i个元素
+					// 把删除的这个元素，push到doneList中去
+					var delArr = this.list.splice(i,1)
+					this.doneList.push(delArr[0])
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

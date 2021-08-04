@@ -1,0 +1,44 @@
+<div title="diff">
+	<p class="foo">bar</p>
+	<p>{{msg}}</p>
+	<button @click='handle'>点击</button>
+</div>
+
+<script>
+
+// 【Vue2.0的Explorer】https://template-explorer.vuejs.org/#
+// 【Vue3.0的Explorer】https://vue-next-template-explorer.netlify.app/#
+
+// 【为什么3.0的性能更好呢？】
+// 1、在v3中生成虚拟的算法进行了优化
+// 	1.1 相比v2的VM，在v3中所有的虚拟DOM节点上都添加了PatchFlag
+// 	1.2 在v3的虚拟DOM生成时，可以采用“静态提升”把那些静态DOM进行提升，避免创建虚拟DOM
+// 	1.3 在v3的虚拟DOM生成时，可以采用“事件缓存”把组件中的事件进行缓存，避免重复处理事件节点
+// 2、在v3中采用了性能更好的diff运算
+// 	传统的Diff运算是怎么的？
+// 	v3中的diff运算又是怎样的？
+// 3、在v3中创建项目可以使用更加高性能构建工具vite
+// 	简单聊一聊你的vite的了解和使用经验。
+
+const vm = (
+	_openBlock(),
+	_createBlock(
+		"div",
+		_hoisted_1,
+		[
+    	_hoisted_2,
+    	_createVNode(
+				"p",
+				null,
+				_toDisplayString(_ctx.msg), 1 /* TEXT */),
+    		_createVNode(
+					"button",
+					{
+      			onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.handle && _ctx.handle(...args)))
+    			},
+					"点击"
+				)
+  	]
+	)
+)
+</script>

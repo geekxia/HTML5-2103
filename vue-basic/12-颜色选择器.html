@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		.qf-color {
+			display: flex;
+			line-height: 60px;
+		}
+		.qf-color span {
+			flex: 1;
+			border: 1px solid #ccc;
+			text-align: center;
+			cursor: pointer;
+		}
+		.qf-color span.on {
+			color: white;
+			background:  orange;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="app">
+		<!-- 类表单 -->
+		<!-- 在没有使用v-model双向绑定时，需要在父组件中使用事件处理器手动接收数据 -->
+		<!-- <qf-color :xxx='curIdx' @yyy='recieveColor'></qf-color> -->
+		<!-- <qf-color :value='curIdx' @input='recieveColor'></qf-color> -->
+
+		<!-- 向子组件传递一个自定义属性叫value，同时向子组件传递一个自定义事件叫input -->
+		<!-- 双向绑定后，不需要在父组件中使用事件处理器来接收了 -->
+		<qf-color :data='colorArr' v-model='curIdx'></qf-color>
+
+		<div :style='{textAlign:"center",color: curColor}'>
+			<h1>我是父组件中的内容文本</h1>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// v-model 非常强大，它本质上就是一种语法糖
+		// v-model = v-bind:value + v-on:input
+		// v-model = :value + @input
+
+		// 组件需求描述：点击颜色选择器组件，把选中的颜色回传给父组件。
+		Vue.component('qf-color', {
+			template: `
+			<div class="qf-color">
+				<span
+					v-for='(col,idx) in data'
+					:class='(value==idx?"on":"")'
+					v-text='col.name'
+					@click='$emit("input", idx)'
+				>
+				</span>
+			</div>
+			`,
+			props: {
+				value: { type: Number,required:false,default:0 },
+				data: { type: Array, required: false, default: [] }
+			}
+		})
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				curIdx: 0,  // 它是v-model所绑定的
+				colorArr: [
+					{ id: 0, name: '黑色', rgb:'#000000' },
+					{ id: 1, name: '蓝色', rgb:'#0000ff' },
+					{ id: 2, name: '绿色', rgb:'#00ff00' },
+					{ id: 3, name: '红色', rgb:'#ff0000' }
+				]
+			},
+			computed: {
+				curColor() {
+					return this.colorArr[this.curIdx].rgb
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

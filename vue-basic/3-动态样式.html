@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style media="screen">
+		.c1 {
+			color: red;
+		}
+		.c2 {
+			color: blue;
+		}
+		.f1 {
+			font-size: 60px;
+		}
+		.f2 {
+			font-size: 80px;
+		}
+		.op {
+			opacity: 0.5;
+		}
+		.ani {
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			background: orange;
+			left: 0;
+			top: 0;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="app">
+		<h1 :class='c+" "+f'>动态class测试</h1>
+		<hr>
+
+		<h1 :class='(`${c} ${f}`)'>动态class测试</h1>
+		<hr>
+		<h1 :class='[c, f, (Math.random()>0.5 ? "op" : "")]'>动态class测试（数组语法）</h1>
+		<hr>
+		<h1 :class='{[c]:bol1, [f]:bol2}'>动态class测试（对象语法）</h1>
+		<hr>
+
+		<h1 :style='(sty+"opacity:"+opa)'>动态style测试</h1>
+		<hr>
+		<h1 :style='[{color:"green", fontSize: "14px", opacity:opa}, {}]'>动态style测试（数组语法）</h1>
+		<hr>
+		<h1 style="color:green;font-size:14px;" :style='{opacity:opa}'>动态style测试（对象语法）</h1>
+
+		<!-- 使用vue的动态样式，实现js动画 -->
+		<div class="ani" :style='{top:t+"px", left:l+"px"}' @click='move'></div>
+
+		<br><br><br><br><br><br>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 大多数的指令所对应的值，都是JS表达式
+
+		// 动态class的三种写法：
+		// 1、 :class='表达式'
+		// 2、 :class='[表达式1, 表达式2, 表达式3, ...]'
+		// 3、 :class='{类名1:布尔值, 类名2:布尔值, 类名3:布尔值, ...}'
+
+		// 动态style的三种语法：
+		// 1、 :style='css属性名1:css属性值1; css属性名2:css属性值2;'
+		// 2、 :style='[{color:'red'}, {fontSize:'30px'}, {}]'
+		// 3、 :style='{css属性名1:css属性值1, css属性名2:css属性值2}'
+
+		// var k = 'foo'
+		// var obj = {
+		// 	bar: 1,
+		// 	[k]: 2
+		// }
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				c: 'c1',
+				f: 'f1',
+				bol1: true,
+				bol2: (3>=2),
+				sty: 'color: green;font-size: 14px;',
+				opa: 0.5,
+				t: 0,
+				l: 0
+			},
+			methods: {
+				move() {
+					setInterval(()=>{
+						this.t += 10
+						this.l += 5
+					}, 500)
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

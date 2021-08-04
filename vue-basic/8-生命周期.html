@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id='app'>
+		<h1 id='h1' v-text='count'></h1>
+		<button @click='updateCount'>自增</button>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 面试题：什么MVC、MVP、MVVM？
+		// MVC，非常大的缺陷，M可以直接操作V视图
+		// MVP，改进了MVC这个最大的缺陷，只有P才能操作V
+		// MVVM，与后端软件架构没有任何关系
+			// M数据层
+			// V视图层
+			// VM虚拟DOM层，它背后是操作V（DOM操作）
+
+		// 前端三贱客 = HTML + CSS + JS
+		// 网页 = 视图V + 数据M
+	</script>
+	<script>
+		// 生命周期：从生到死的过程
+		// Vue的生命周期由11个钩子函数组成，
+		// 常用的有8个，分为四个阶段：创建阶段、挂载阶段、更新阶段、销毁阶段
+		// 所谓的钩子函数，就是一个一个的重要时刻（时间点）。
+		// 类比：人的一生  |   |   |   |   |   |   |
+		var app = new Vue({
+			el: '#app',
+			data: {
+				count: 1
+			},
+			methods: {
+				updateCount() {
+					this.count++
+				}
+			},
+
+			// 在new Vue() 和 beforeCreate之间，Vue做了哪些事儿？
+			// 1、对所有钩子函数进行初始化
+			// 2、对methods中所有的自定义方法或事件处理器进行初始化
+
+
+			// 第一阶段（创建阶段）
+			// 1、实现响应式：使用Object.defineProperty对data选项上的所有数据进行劫持
+			// 2、实现依赖注入：依赖收集（上下文）
+			beforeCreate() {
+				console.log('----- beforeCreate')
+			},
+			created() {
+				console.log('----- created')
+				// 经常用于ajax请求数据
+			},
+
+			// 第二阶段（挂载阶段、装载阶段）
+			// 1、根据视图模板编译得到的抽象语法树（AST），生成虚拟DOM。什么是虚拟DOM？
+				// VM实际上就是一个json文件，它用于描述真实的DOM结构，并且把所有指令对应的节点标记出来。
+			// 2、当虚拟DOM第一次生成后，要通过Watcher把虚拟DOM渲染（替换）成真实的DOM结构。
+			beforeMount() {
+				console.log('----- beforeMount')
+			},
+			mounted() {
+				console.log('----- mounted')
+				// 经常用于ajax请求数据
+				// 开启定时器
+				// 开启Websocket长连接、监听长连接的通信事件
+				// 做一些与DOM的相关的事
+				// 还可以实例化一些与DOM相关的第三方插件
+				this.timer = setInterval(()=>{
+					this.count++
+					console.log('timer')
+				}, 1000)
+			},
+
+			// 第三阶段（更新阶段）
+			// 1、根据变化的data，又生成一个新的虚拟DOM。
+			// 2、使用diff运算 patch(oldVnode, newVnode)，返回一个脏节点的集合，再通知Watcher把脏节点更新到真实的DOM中。
+			beforeUpdate() {
+				console.log('----- beforeUpdate')
+			},
+			updated() {
+				console.log('----- updated')
+				// 如果你想在更新完成时，做点什么事儿
+			},
+
+			// 第四阶段（销毁阶段）
+			// 1、拆卸掉Watcher，移除掉响应式的观察者。
+			// 2、拆卸掉组件及其后代组件中的事件处理器。
+			beforeDestroy() {
+				console.log('----- beforeDestroy')
+				// 清除定时器
+				// 关闭长连接，销毁长连接事件
+				// 清除一切耗费内存资源的变量
+				clearInterval(this.timer)
+			},
+			destroyed() {
+				console.log('----- destroyed')
+			}
+		})
+	</script>
+</body>
+</html>

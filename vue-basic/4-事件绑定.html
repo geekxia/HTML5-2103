@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<div id="app">
+		<h1 @mouseenter='moveEnterHandle("hehe", $event)'>移入到表面</h1>
+
+		<div v-for='i in 5'>
+			<div v-text='i' @click='consoleIndex($event, i, true, ["hello"], {})'></div>
+		</div>
+
+		<div>
+			<a href="https://baidu.com" @click.prevent='editHandle'>编辑</a>
+		</div>
+
+		<div>
+			<input type="checkbox" @click.prevent='moveHandle' />
+		</div>
+
+		<div @click='outerClick'>
+			<a href="https://baidu.com" @click.stop.prevent='innerClick'>内部元素</a>
+		</div>
+
+		<div>
+			<input type="text" @keyup.enter='search' />
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		// 事件绑定 v-on  简写 @
+		// 1、如何拿到事件对象？在没有事件传参的情况下，事件处理函数最后一个参数就是事件对象；如果有事件参数传递，需要手动传递事件对象$event。
+		// 2、如何进行事件传参？语法：@eventName='eventHandler(arg1,arg2,$event)'
+		// 3、如何阻止默认事件、阻止冒泡？使用 .prevent阻止默认事件，使用.stop阻止冒泡
+		// 4、如何绑定键盘事件（监听enter事件）？使用.enter监听Enter键
+		// 5、事件修饰符的使用：事件修饰符可以链式调用 @eventName.x.y.z='handler'
+
+		var app = new Vue({
+			el: '#app',
+			data: {},
+			methods: {
+				moveEnterHandle(arg, e) {
+					console.log('arg', arg)
+					console.log('事件对象', e)
+				},
+				consoleIndex(e, idx1,idx2,idx3,idx4) {
+					console.log('e', e)
+					console.log(idx1,idx2,idx3,idx4)
+				},
+				editHandle() {
+					console.log('编辑')
+				},
+				moveHandle() {
+					console.log('checkbox')
+				},
+				outerClick() {
+					console.log('outer clicked')
+				},
+				innerClick() {
+					console.log('inner clicked')
+				},
+				search() {
+					console.log('开始搜索')
+				}
+			}
+		})
+	</script>
+
+
+</body>
+</html>
